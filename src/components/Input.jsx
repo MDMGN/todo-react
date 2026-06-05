@@ -1,14 +1,19 @@
 import { useState } from "react";
 
-export default function Input({ valueInitial, placeholder, type, onChange }) {
-
+export default function Input({
+  valueInitial,
+  placeholder,
+  type,
+  onChange, /** onChange = ()=>{}  */
+  ref,
+}) {
   const [value, setValue] = useState(valueInitial);
 
+  console.log("Renderizando Input...");
+
   function handleInput(value) {
-    const newValue = value.trim(); // Eliminar espacios al inicio
-    if (newValue === "") return; // Evitar agregar tareas vacías
-    setValue(newValue);
-    onChange(newValue);
+    setValue(value);
+    onChange?.(value);
   }
 
   return (
@@ -17,7 +22,7 @@ export default function Input({ valueInitial, placeholder, type, onChange }) {
       placeholder={placeholder}
       value={value}
       onChange={(e) => handleInput(e.target.value)}
+      ref={ref}
     />
-    
   );
 }

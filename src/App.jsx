@@ -1,16 +1,14 @@
-import { useState } from "react";
 import "./App.css";
 import Input from "./components/Input";
+import TodoList from "./components/TodoList";
+import Button from "./components/Button";
+import EmptyMessage from "./components/EmptyMessage";
+import useTodos from "./hooks/useTodos";
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  const { todos, todoRef, addTodo } = useTodos();
 
-  function addTodo() {
-    /*  if (todo.trim() === "") return; // Evitar agregar tareas vacías
-
-    setTodos([...todos, todo]);
-    setTodo(""); // Limpiar el input después de agregar la tarea */
-  }
+  console.log("Renderizando App...");
 
   return (
     // React Fragment
@@ -18,16 +16,15 @@ function App() {
       <div className="App">
         <h1 className="title">Todo App con React</h1>
         <div className="todo-container">
-          <Input />
-          
-          <button onClick={addTodo}>Agregar</button>
-
-          <ul className="todo-list">
-            {todos.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
+          <Input
+            ref={todoRef}
+            type={"text"}
+            placeholder={"Escribe tu tarea..."}
+            valueInitial={""}
+          />
+          <Button onClick={addTodo} title={"Agregar"} />
         </div>
+        {todos.length === 0 ? <EmptyMessage /> : <TodoList todos={todos} />}
       </div>
     </>
   );
