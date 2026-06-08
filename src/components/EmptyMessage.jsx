@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 export default function EmptyMessage() {
+  
   useEffect(() => {
     // Cuando se desmonte el componente
     return () => {

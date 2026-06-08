@@ -1,34 +1,35 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { getTodosStore } from "../store/todo-store";
 
 export default function useTodos() {
   const [todos, setTodos] = useState([]);
-  const todoRef = useRef();
 
-  function addTodo() {
+  function addTodo(todo) {
     // Evitar agregar tareas vacías
-    const newTodo = todoRef.current.value.trim();
-
+    const newTodo = todo.trim();
     if (!newTodo) return;
-
     const updatedTodos = [...todos, newTodo];
-
     setTodos(updatedTodos);
-    // Guardar la tarea en localStorage
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
-    todoRef.current.value = ""; // Limpiar el campo de entrada después de agregar la tarea
   }
+
+  /*   function removeTodo(id) {
+  }
+
+  function updateTodo(id, newValue) {} */
+
+  useEffect(() => {
+    console.log("Renderizando por cada cambio en el estado de tareas...");
+  }, [todos /* ,isLoading */]);
 
   // Cuando se monta el componente
   useEffect(() => {
+    console.log("Renderizando solo una vez al montar el componente...");
     function loadTodos() {
-      const savedTodos = localStorage.getItem("todos");
-      if (savedTodos) {
-        setTodos(JSON.parse(savedTodos));
-      }
+      setTodos(getTodosStore());
     }
-
+    // Cargar las tareas guardadas en localStorage al montar el componente
     loadTodos();
   }, []);
 
-  return { todos, todoRef, addTodo };
+  return { todos, addTodo };
 }
