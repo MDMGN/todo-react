@@ -1,13 +1,10 @@
 import TodoItem from "./TodoItem";
-import useTodos from "../hooks/useTodos";
 
-export default function TodoList() {
-  const { todos } = useTodos();
-
+export default function TodoList({ todos }) {
   return (
     <ul className="todo-list">
-      {todos.map((item, index) => (
-        <TodoItem key={index} todo={item} />
+      {todos.map((item) => (
+        <TodoItem key={item.id} todo={item} />
       ))}
     </ul>
   );

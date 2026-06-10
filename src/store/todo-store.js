@@ -1,8 +1,7 @@
-export function addTodoStore(newTodo) {
-  const currentTodos = getTodosStore();
-  const updatedTodos = [...currentTodos, newTodo];
+export function updateTodoStore(newTodos) {
+  if (!Array.isArray(newTodos)) return;
   // Guardar la tarea en localStorage
-  localStorage.setItem("todos", JSON.stringify(updatedTodos));
+  localStorage.setItem("todos", JSON.stringify(newTodos));
 }
 
 export function getTodosStore() {

@@ -1,3 +1,5 @@
 export default function TodoItem({ todo }) {
-  return <li>{todo}</li>;
+  const { title } = todo;
+
+  return <li>{title}</li>;
 }

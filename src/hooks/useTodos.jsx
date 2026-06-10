@@ -1,15 +1,29 @@
-import { useEffect, useState } from "react";
-import { getTodosStore } from "../store/todo-store";
+import { useEffect, useRef, useState } from "react";
+import { getTodosStore, updateTodoStore } from "../store/todo-store";
 
 export default function useTodos() {
+  const inputRef = useRef();
   const [todos, setTodos] = useState([]);
 
-  function addTodo(todo) {
+  function addTodo() {
+    const title = inputRef.current.value.trim();
     // Evitar agregar tareas vacías
-    const newTodo = todo.trim();
-    if (!newTodo) return;
+
+    if (!title) return;
+    
+    const newTodo = {
+      id: Date.now().toString(36),
+      title,
+      completed: false,
+    };
+
     const updatedTodos = [...todos, newTodo];
     setTodos(updatedTodos);
+    // Actulizamos nuestro localStorage
+    updateTodoStore(updatedTodos);
+    //Limpiamos y volvemos al foco del input
+    inputRef.current.value = "";
+    inputRef.current.focus();
   }
 
   /*   function removeTodo(id) {
@@ -30,6 +44,5 @@ export default function useTodos() {
     // Cargar las tareas guardadas en localStorage al montar el componente
     loadTodos();
   }, []);
-
-  return { todos, addTodo };
+  return { todos, addTodo, inputRef };
 }

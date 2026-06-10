@@ -2,19 +2,13 @@ import "./App.css";
 import Input from "./components/Input";
 import TodoList from "./components/TodoList";
 import Button from "./components/Button";
-import { useRef } from "react";
+import EmptyMessage from "./components/EmptyMessage";
+import useTodos from "./hooks/useTodos";
 
 function App() {
-  const inputRef = useRef();
+  const { todos, addTodo, inputRef } = useTodos();
 
-  function handleAddTodo() {
-    const todo = inputRef.current.value.trim();
-    
-    console.log({ todo });
-
-    inputRef.current.value = "";
-    inputRef.current.focus();
-  }
+  const isEmptyTodoList = todos.length === 0;
 
   return (
     // React Fragment
@@ -28,9 +22,9 @@ function App() {
             placeholder={"Escribe tu tarea..."}
             valueInitial={""}
           />
-          <Button onClick={handleAddTodo} title={"Agregar"} />
+          <Button onClick={addTodo} title={"Agregar"} />
         </div>
-        <TodoList />
+        {isEmptyTodoList ? <EmptyMessage /> : <TodoList todos={todos} />}
       </div>
     </>
   );

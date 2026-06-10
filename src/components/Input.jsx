@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 
-export default function Input({
-  valueInitial,
-  placeholder,
-  type,
-  onChange, /** onChange = ()=>{}  */
-  ref,
-}) {
+const Input = memo((props) => {
+  const {
+    valueInitial,
+    placeholder,
+    type,
+    onChange /** onChange = ()=>{}  */,
+    ref,
+  } = props;
   const [value, setValue] = useState(valueInitial);
 
   console.log("Renderizando Input...");
@@ -25,4 +26,6 @@ export default function Input({
       ref={ref}
     />
   );
-}
+}, []);
+
+export default Input;
