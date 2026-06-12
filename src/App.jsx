@@ -6,7 +6,7 @@ import EmptyMessage from "./components/EmptyMessage";
 import useTodos from "./hooks/useTodos";
 
 function App() {
-  const { todos, addTodo, inputRef } = useTodos();
+  const { todos, addTodo, inputRef, removeTodo, updateTodo } = useTodos();
 
   const isEmptyTodoList = todos.length === 0;
 
@@ -24,7 +24,15 @@ function App() {
           />
           <Button onClick={addTodo} title={"Agregar"} />
         </div>
-        {isEmptyTodoList ? <EmptyMessage /> : <TodoList todos={todos} />}
+        {isEmptyTodoList ? (
+          <EmptyMessage />
+        ) : (
+          <TodoList
+            todos={todos}
+            removeTodo={removeTodo}
+            updateTodo={updateTodo}
+          />
+        )}
       </div>
     </>
   );

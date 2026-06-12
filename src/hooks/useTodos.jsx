@@ -8,9 +8,8 @@ export default function useTodos() {
   function addTodo() {
     const title = inputRef.current.value.trim();
     // Evitar agregar tareas vacías
-
     if (!title) return;
-    
+
     const newTodo = {
       id: Date.now().toString(36),
       title,
@@ -18,18 +17,28 @@ export default function useTodos() {
     };
 
     const updatedTodos = [...todos, newTodo];
+
     setTodos(updatedTodos);
-    // Actulizamos nuestro localStorage
+    // Actualizamos nuestro localStorage
     updateTodoStore(updatedTodos);
     //Limpiamos y volvemos al foco del input
     inputRef.current.value = "";
     inputRef.current.focus();
   }
 
-  /*   function removeTodo(id) {
+  function removeTodo(id) {
+    const filteredTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(filteredTodos);
+    updateTodoStore(filteredTodos);
   }
 
-  function updateTodo(id, newValue) {} */
+  function updateTodo(newTodo) {
+    const updatedTodos = todos.map((todo) =>
+      todo.id == newTodo.id ? newTodo : todo,
+    );
+    setTodos(updatedTodos);
+    updateTodoStore(updatedTodos);
+  }
 
   useEffect(() => {
     console.log("Renderizando por cada cambio en el estado de tareas...");
@@ -44,5 +53,6 @@ export default function useTodos() {
     // Cargar las tareas guardadas en localStorage al montar el componente
     loadTodos();
   }, []);
-  return { todos, addTodo, inputRef };
+
+  return { todos, addTodo, inputRef, removeTodo, updateTodo };
 }
