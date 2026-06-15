@@ -1,30 +1,31 @@
-import { useState } from "react";
-
 export default function Input({
+  id,
+  name,
   valueInitial,
   placeholder,
   type,
   onChange /** onChange = ()=>{}  */,
   ref,
   readOnly,
+  className = "",
+  ariaLabel,
 }) {
-  const [value, setValue] = useState(valueInitial);
-
-  console.log("Renderizando Input...");
-
   function handleInput(value) {
-    setValue(value);
     onChange?.(value);
   }
 
   return (
     <input
+      id={id}
+      name={name}
+      className={className}
       type={type}
       placeholder={placeholder}
-      value={value}
+      defaultValue={valueInitial}
       onChange={(e) => handleInput(e.target.value)}
       ref={ref}
       readOnly={readOnly}
+      aria-label={ariaLabel}
     />
   );
 }

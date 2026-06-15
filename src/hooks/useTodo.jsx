@@ -6,6 +6,11 @@ export default function useTodo(todo, updateTodo) {
 
   function onEdit(value) {
     if (isEditing) {
+      if (!value) {
+        inputRef.current.focus();
+        return;
+      }
+
       updateTodo({ ...todo, title: value });
     } else {
       inputRef.current.focus();

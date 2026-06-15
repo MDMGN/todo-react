@@ -8,15 +8,32 @@ export default function TodoItem({ todo, removeTodo, updateTodo }) {
   const btnEditTitle = isEditing ? "Guardar" : "Editar";
 
   return (
-    <li>
-      <Input ref={inputRef} readOnly={!isEditing} valueInitial={title} />
-      <span>
+    <li className={`todo-item${isEditing ? " todo-item-editing" : ""}`}>
+      <Input
+        id={`todo-${id}`}
+        name={`todo-${id}`}
+        ref={inputRef}
+        className="todo-item-input"
+        readOnly={!isEditing}
+        valueInitial={title}
+        ariaLabel={`Tarea: ${title}`}
+      />
+      <div className="todo-actions">
         <Button
           onClick={() => onEdit(inputRef.current.value.trim())}
           title={btnEditTitle}
+          variant={isEditing ? "primary" : "secondary"}
+          className="button-small"
+          ariaLabel={`${btnEditTitle} tarea: ${title}`}
         />
-        <Button onClick={() => removeTodo(id)} title="Eliminar" />
-      </span>
+        <Button
+          onClick={() => removeTodo(id)}
+          title="Eliminar"
+          variant="danger"
+          className="button-small"
+          ariaLabel={`Eliminar tarea: ${title}`}
+        />
+      </div>
     </li>
   );
 }

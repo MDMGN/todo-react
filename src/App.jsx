@@ -9,21 +9,38 @@ function App() {
   const { todos, addTodo, inputRef, removeTodo, updateTodo } = useTodos();
 
   const isEmptyTodoList = todos.length === 0;
+  const todoCounter = todos.length === 1 ? "1 tarea" : `${todos.length} tareas`;
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    addTodo();
+  }
 
   return (
-    // React Fragment
-    <>
-      <div className="App">
+    <main className="App">
+      <header className="app-header">
+        <p className="app-label">Curso React</p>
         <h1 className="title">Todo App con React</h1>
-        <div className="todo-container">
-          <Input
-            ref={inputRef}
-            type={"text"}
-            placeholder={"Escribe tu tarea..."}
-            valueInitial={""}
-          />
-          <Button onClick={addTodo} title={"Agregar"} />
-        </div>
+        <p className="app-summary">{todoCounter} guardadas en este navegador</p>
+      </header>
+
+      <form className="todo-form" onSubmit={handleSubmit}>
+        <label className="sr-only" htmlFor="new-todo">
+          Nueva tarea
+        </label>
+        <Input
+          id="new-todo"
+          name="new-todo"
+          ref={inputRef}
+          className="todo-input"
+          type="text"
+          placeholder="Escribe tu tarea..."
+          valueInitial=""
+        />
+        <Button type="submit" title="Agregar" variant="primary" />
+      </form>
+
+      <section className="todo-section" aria-live="polite">
         {isEmptyTodoList ? (
           <EmptyMessage />
         ) : (
@@ -33,8 +50,8 @@ function App() {
             updateTodo={updateTodo}
           />
         )}
-      </div>
-    </>
+      </section>
+    </main>
   );
 }
 

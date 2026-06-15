@@ -21,7 +21,7 @@ export default function useTodos() {
     setTodos(updatedTodos);
     // Actualizamos nuestro localStorage
     updateTodoStore(updatedTodos);
-    //Limpiamos y volvemos al foco del input
+    // Limpiamos y volvemos al foco del input
     inputRef.current.value = "";
     inputRef.current.focus();
   }
@@ -34,7 +34,7 @@ export default function useTodos() {
 
   function updateTodo(newTodo) {
     const updatedTodos = todos.map((todo) =>
-      todo.id == newTodo.id ? newTodo : todo,
+      todo.id === newTodo.id ? newTodo : todo,
     );
     setTodos(updatedTodos);
     updateTodoStore(updatedTodos);
