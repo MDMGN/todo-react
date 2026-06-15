@@ -7,8 +7,15 @@ export default function TodoItem({ todo, removeTodo, updateTodo }) {
   const { isEditing, onEdit, inputRef } = useTodo(todo, updateTodo);
   const btnEditTitle = isEditing ? "Guardar" : "Editar";
 
+  console.log("Rederizando TodoItem");
+
   return (
     <li className={`todo-item${isEditing ? " todo-item-editing" : ""}`}>
+      <Input
+        type={"checkbox"}
+        checked={todo.completed}
+        onChange={() => updateTodo({ ...todo, completed: !todo.completed })}
+      />
       <Input
         id={`todo-${id}`}
         name={`todo-${id}`}

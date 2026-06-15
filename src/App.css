@@ -135,12 +135,12 @@
 }
 
 .todo-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  display: flex;
   gap: 12px;
   align-items: center;
   padding: 14px 16px;
   border-bottom: 1px solid var(--color-border);
+  
 }
 
 .todo-item:last-child {

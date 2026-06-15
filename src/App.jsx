@@ -6,7 +6,16 @@ import EmptyMessage from "./components/EmptyMessage";
 import useTodos from "./hooks/useTodos";
 
 function App() {
-  const { todos, addTodo, inputRef, removeTodo, updateTodo } = useTodos();
+  const {
+    todos,
+    addTodo,
+    inputRef,
+    removeTodo,
+    updateTodo,
+    isSortCompleted,
+    setIsSortCompleted,
+    sortTodosCompleted,
+  } = useTodos();
 
   const isEmptyTodoList = todos.length === 0;
   const todoCounter = todos.length === 1 ? "1 tarea" : `${todos.length} tareas`;
@@ -38,6 +47,14 @@ function App() {
           valueInitial=""
         />
         <Button type="submit" title="Agregar" variant="primary" />
+        <div>
+          <label htmlFor="">Ordenar por tareas realizadas: </label>
+          <Input
+            checked={isSortCompleted}
+            type={"checkbox"}
+            onChange={() => setIsSortCompleted(!isSortCompleted)}
+          />
+        </div>
       </form>
 
       <section className="todo-section" aria-live="polite">
@@ -45,7 +62,7 @@ function App() {
           <EmptyMessage />
         ) : (
           <TodoList
-            todos={todos}
+            todos={isSortCompleted ? sortTodosCompleted : todos}
             removeTodo={removeTodo}
             updateTodo={updateTodo}
           />

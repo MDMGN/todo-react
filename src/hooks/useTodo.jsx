@@ -1,22 +1,26 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 export default function useTodo(todo, updateTodo) {
   const [isEditing, setIsEditing] = useState(false);
+  /*  const [completed, setCompleted] = useState(todo.completed); */
   const inputRef = useRef(null);
 
-  function onEdit(value) {
-    if (isEditing) {
-      if (!value) {
+  const onEdit = useCallback(
+    (value) => {
+      if (isEditing) {
+        if (!value) {
+          inputRef.current.focus();
+          return;
+        }
+
+        updateTodo({ ...todo, title: value });
+      } else {
         inputRef.current.focus();
-        return;
       }
+      setIsEditing(!isEditing);
+    },
+    [isEditing, todo, updateTodo],
+  );
 
-      updateTodo({ ...todo, title: value });
-    } else {
-      inputRef.current.focus();
-    }
-    setIsEditing(!isEditing);
-  }
-
-  return { isEditing, onEdit, inputRef };
+  return { isEditing, onEdit, inputRef /* completed, setCompleted */ };
 }

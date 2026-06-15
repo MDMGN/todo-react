@@ -1,9 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getTodosStore, updateTodoStore } from "../store/todo-store";
 
 export default function useTodos() {
   const inputRef = useRef();
   const [todos, setTodos] = useState([]);
+  const [isSortCompleted, setIsSortCompleted] = useState(false);
+
+  const sortTodosCompleted = useMemo(() => {
+    return todos.toSorted((a, b) => {
+      if (a.completed !== b.completed) {
+        return Number(b.completed) - Number(a.completed);
+      }
+      return a.title.localeCompare(b.title);
+    });
+  }, [todos]);
 
   function addTodo() {
     const title = inputRef.current.value.trim();
@@ -54,5 +64,14 @@ export default function useTodos() {
     loadTodos();
   }, []);
 
-  return { todos, addTodo, inputRef, removeTodo, updateTodo };
+  return {
+    todos,
+    addTodo,
+    inputRef,
+    removeTodo,
+    updateTodo,
+    isSortCompleted,
+    setIsSortCompleted,
+    sortTodosCompleted,
+  };
 }
