@@ -51,6 +51,6 @@ function Counter() {
 
   - Crear un botón o un checkBox y el evento "onClick" o "onChange" para llamar al contexto y cambiar el estado de **theme** -> "dark" o "light"
 
-  - Cambia los estilos o clases que correspondan con el tema elegio.
+  - Cambia los estilos o clases que correspondan con el tema elegido.
 
   - Persistir el estado de theme en localStorage.
