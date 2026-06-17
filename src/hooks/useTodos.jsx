@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getTodosStore, updateTodoStore } from "../store/todo-store";
 
 export default function useTodos() {
-  const inputRef = useRef();
   const [todos, setTodos] = useState([]);
   const [isSortCompleted, setIsSortCompleted] = useState(false);
 
@@ -15,8 +14,7 @@ export default function useTodos() {
     });
   }, [todos]);
 
-  function addTodo() {
-    const title = inputRef.current.value.trim();
+  function addTodo({ title, onCompleted }) {
     // Evitar agregar tareas vacías
     if (!title) return;
 
@@ -31,9 +29,8 @@ export default function useTodos() {
     setTodos(updatedTodos);
     // Actualizamos nuestro localStorage
     updateTodoStore(updatedTodos);
-    // Limpiamos y volvemos al foco del input
-    inputRef.current.value = "";
-    inputRef.current.focus();
+    // Se ejecuta cuando actulizamos el estado y localStorage
+    onCompleted?.();
   }
 
   function removeTodo(id) {
@@ -67,7 +64,6 @@ export default function useTodos() {
   return {
     todos,
     addTodo,
-    inputRef,
     removeTodo,
     updateTodo,
     isSortCompleted,

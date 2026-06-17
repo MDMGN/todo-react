@@ -1,8 +1,11 @@
 import Button from "./Button";
 import Input from "./Input";
 import useTodo from "../hooks/useTodo";
+import { useContext } from "react";
+import { TODOContext } from "../context/TODOContext";
 
-export default function TodoItem({ todo, removeTodo, updateTodo }) {
+export default function TodoItem({ todo }) {
+  const { updateTodo, removeTodo } = useContext(TODOContext);
   const { id, title } = todo;
   const { isEditing, onEdit, inputRef } = useTodo(todo, updateTodo);
   const btnEditTitle = isEditing ? "Guardar" : "Editar";

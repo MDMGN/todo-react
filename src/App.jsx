@@ -3,27 +3,32 @@ import Input from "./components/Input";
 import TodoList from "./components/TodoList";
 import Button from "./components/Button";
 import EmptyMessage from "./components/EmptyMessage";
-import useTodos from "./hooks/useTodos";
+import { useContext, useRef } from "react";
+import { TODOContext } from "./context/TODOContext";
 
 function App() {
+  const inputRef = useRef();
+
   const {
     todos,
     addTodo,
-    inputRef,
-    removeTodo,
-    updateTodo,
     isSortCompleted,
     setIsSortCompleted,
     sortTodosCompleted,
-  } = useTodos();
+  } = useContext(TODOContext);
+
+  function handleAddTodo() {
+    addTodo({
+      title: inputRef.current.value.trim(),
+      onCompleted: () => {
+        inputRef.current.value = "";
+        inputRef.current.focus();
+      },
+    });
+  }
 
   const isEmptyTodoList = todos.length === 0;
   const todoCounter = todos.length === 1 ? "1 tarea" : `${todos.length} tareas`;
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    addTodo();
-  }
 
   return (
     <main className="App">
@@ -33,7 +38,7 @@ function App() {
         <p className="app-summary">{todoCounter} guardadas en este navegador</p>
       </header>
 
-      <form className="todo-form" onSubmit={handleSubmit}>
+      <form className="todo-form">
         <label className="sr-only" htmlFor="new-todo">
           Nueva tarea
         </label>
@@ -46,7 +51,12 @@ function App() {
           placeholder="Escribe tu tarea..."
           valueInitial=""
         />
-        <Button type="submit" title="Agregar" variant="primary" />
+        <Button
+          type="button"
+          title="Agregar"
+          variant="primary"
+          onClick={handleAddTodo}
+        />
         <div>
           <label htmlFor="">Ordenar por tareas realizadas: </label>
           <Input
@@ -61,11 +71,7 @@ function App() {
         {isEmptyTodoList ? (
           <EmptyMessage />
         ) : (
-          <TodoList
-            todos={isSortCompleted ? sortTodosCompleted : todos}
-            removeTodo={removeTodo}
-            updateTodo={updateTodo}
-          />
+          <TodoList todos={isSortCompleted ? sortTodosCompleted : todos} />
         )}
       </section>
     </main>
