@@ -5,9 +5,12 @@ import Button from "./components/Button";
 import EmptyMessage from "./components/EmptyMessage";
 import { useContext, useRef } from "react";
 import { TODOContext } from "./context/TODOContext";
+import DarkModeButton from "./components/DarkModeButton";
+import useTheme from "./theme/useTheme";
 
 function App() {
   const inputRef = useRef();
+  const currentTheme = useTheme();
 
   const {
     todos,
@@ -17,7 +20,8 @@ function App() {
     sortTodosCompleted,
   } = useContext(TODOContext);
 
-  function handleAddTodo() {
+  function handleAddTodo(e) {
+    e.preventDefault();
     addTodo({
       title: inputRef.current.value.trim(),
       onCompleted: () => {
@@ -31,14 +35,21 @@ function App() {
   const todoCounter = todos.length === 1 ? "1 tarea" : `${todos.length} tareas`;
 
   return (
-    <main className="App">
+    <main className={currentTheme.app}>
       <header className="app-header">
-        <p className="app-label">Curso React</p>
-        <h1 className="title">Todo App con React</h1>
-        <p className="app-summary">{todoCounter} guardadas en este navegador</p>
+        <div>
+          <p className="app-label">Curso React</p>
+          <h1 className={currentTheme.title}>Todo App con React</h1>
+          <p className={currentTheme.appSummary}>
+            {todoCounter} guardadas en este navegador
+          </p>
+        </div>
+        <div className="app-btn-darkMode-container">
+          <DarkModeButton />
+        </div>
       </header>
 
-      <form className="todo-form">
+      <form className={currentTheme.todoForm}>
         <label className="sr-only" htmlFor="new-todo">
           Nueva tarea
         </label>
@@ -52,7 +63,7 @@ function App() {
           valueInitial=""
         />
         <Button
-          type="button"
+          type="submit"
           title="Agregar"
           variant="primary"
           onClick={handleAddTodo}
@@ -71,7 +82,10 @@ function App() {
         {isEmptyTodoList ? (
           <EmptyMessage />
         ) : (
-          <TodoList todos={isSortCompleted ? sortTodosCompleted : todos} />
+          <TodoList
+            todos={isSortCompleted ? sortTodosCompleted : todos}
+            theme={currentTheme}
+          />
         )}
       </section>
     </main>

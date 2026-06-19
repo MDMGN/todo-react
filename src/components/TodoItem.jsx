@@ -4,7 +4,7 @@ import useTodo from "../hooks/useTodo";
 import { useContext } from "react";
 import { TODOContext } from "../context/TODOContext";
 
-export default function TodoItem({ todo }) {
+export default function TodoItem({ todo, theme }) {
   const { updateTodo, removeTodo } = useContext(TODOContext);
   const { id, title } = todo;
   const { isEditing, onEdit, inputRef } = useTodo(todo, updateTodo);
@@ -23,7 +23,7 @@ export default function TodoItem({ todo }) {
         id={`todo-${id}`}
         name={`todo-${id}`}
         ref={inputRef}
-        className="todo-item-input"
+        className={theme.todoItemInput}
         readOnly={!isEditing}
         valueInitial={title}
         ariaLabel={`Tarea: ${title}`}
