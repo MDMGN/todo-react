@@ -39,13 +39,13 @@ export default function useTodos() {
     updateTodoStore(filteredTodos);
   }
 
-  function updateTodo(newTodo) {
+  /*  function updateTodo(newTodo) {
     const updatedTodos = todos.map((todo) =>
       todo.id === newTodo.id ? newTodo : todo,
     );
     setTodos(updatedTodos);
     updateTodoStore(updatedTodos);
-  }
+  } */
 
   useEffect(() => {
     console.log("Renderizando por cada cambio en el estado de tareas...");
@@ -65,7 +65,6 @@ export default function useTodos() {
     todos,
     addTodo,
     removeTodo,
-    updateTodo,
     isSortCompleted,
     setIsSortCompleted,
     sortTodosCompleted,

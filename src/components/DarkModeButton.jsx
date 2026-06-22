@@ -12,7 +12,8 @@ export default function DarkModeButton() {
     <span
       className="btn-darkMode"
       onClick={() => {
-        setTheme(theme === "dark" ? "light" : "dark");
+        const newTheme = theme === "dark" ? "light" : "dark";
+        setTheme(newTheme);
       }}
     >
       {theme === "dark" ? (

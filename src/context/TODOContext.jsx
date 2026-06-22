@@ -1,5 +1,7 @@
-import { createContext } from "react";
+import { createContext, useReducer } from "react";
 import useTodos from "../hooks/useTodos";
+import { TodoActions, TodoReducer } from "../reducers/TODOReducer";
+import { getTodosStore } from "../store/todo-store";
 
 const TODOContext = createContext({});
 
@@ -10,19 +12,24 @@ function TODOProvider({ children }) {
     removeTodo,
     setIsSortCompleted,
     sortTodosCompleted,
-    todos,
-    updateTodo,
   } = useTodos();
+
+  const [state, dispatch] = useReducer(TodoReducer, getTodosStore());
+
   return (
     <TODOContext.Provider
       value={{
-        todos,
+        todos: state,
         isSortCompleted,
         addTodo,
         removeTodo,
         setIsSortCompleted,
         sortTodosCompleted,
-        updateTodo,
+        updateTodo: (newTodo) =>
+          dispatch({
+            type: TodoActions.UPDATE_TODO,
+            payload: newTodo,
+          }),
       }}
     >
       {children}
