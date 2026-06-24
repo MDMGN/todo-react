@@ -1,6 +1,7 @@
 :root {
   --color-page: #f3f6fa;
   --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
   --color-surface-muted: #f8fafc;
   --color-text: #1f2937;
   --color-heading: #111827;
@@ -23,34 +24,13 @@
 
   font: 16px/1.5 var(--sans);
   letter-spacing: 0;
-  color-scheme: light dark;
+  color-scheme: light;
   color: var(--color-text);
   background: var(--color-page);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-page: #111827;
-    --color-surface: #18202f;
-    --color-surface-muted: #202a3a;
-    --color-text: #d7dde8;
-    --color-heading: #f8fafc;
-    --color-muted: #9aa7ba;
-    --color-border: #334155;
-    --color-primary: #60a5fa;
-    --color-primary-hover: #93c5fd;
-    --color-primary-contrast: #0f172a;
-    --color-danger: #fca5a5;
-    --color-danger-bg: #3f1f26;
-    --color-danger-border: #7f1d1d;
-    --color-danger-hover: #fecaca;
-    --color-focus: rgba(147, 197, 253, 0.32);
-    --shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.28);
-  }
 }
 
 * {

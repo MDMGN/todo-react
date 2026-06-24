@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
-import { getTodosStore, updateTodoStore } from "../store/todo-store";
+import { useMemo, useState } from "react";
 
-export default function useTodos() {
-  const [todos, setTodos] = useState([]);
+export default function useTodos(todos) {
+  /*  const [todos,setTodos] = useState([]) */
   const [isSortCompleted, setIsSortCompleted] = useState(false);
 
   const sortTodosCompleted = useMemo(() => {
+    console.log("Todos se ha actulizado", todos);
     return todos.toSorted((a, b) => {
       if (a.completed !== b.completed) {
         return Number(b.completed) - Number(a.completed);
@@ -14,7 +14,7 @@ export default function useTodos() {
     });
   }, [todos]);
 
-  function addTodo({ title, onCompleted }) {
+  /* function addTodo({ title, onCompleted }) {
     // Evitar agregar tareas vacías
     if (!title) return;
 
@@ -31,13 +31,13 @@ export default function useTodos() {
     updateTodoStore(updatedTodos);
     // Se ejecuta cuando actulizamos el estado y localStorage
     onCompleted?.();
-  }
+  } */
 
-  function removeTodo(id) {
+  /* function removeTodo(id) {
     const filteredTodos = todos.filter((todo) => todo.id !== id);
     setTodos(filteredTodos);
     updateTodoStore(filteredTodos);
-  }
+  } */
 
   /*  function updateTodo(newTodo) {
     const updatedTodos = todos.map((todo) =>
@@ -47,24 +47,21 @@ export default function useTodos() {
     updateTodoStore(updatedTodos);
   } */
 
-  useEffect(() => {
+  /*  useEffect(() => {
     console.log("Renderizando por cada cambio en el estado de tareas...");
-  }, [todos /* ,isLoading */]);
+  }, [todos ]); */
 
   // Cuando se monta el componente
-  useEffect(() => {
+  /*  useEffect(() => {
     console.log("Renderizando solo una vez al montar el componente...");
-    function loadTodos() {
+     function loadTodos() {
       setTodos(getTodosStore());
     }
     // Cargar las tareas guardadas en localStorage al montar el componente
-    loadTodos();
-  }, []);
+    loadTodos(); 
+  }, []); */
 
   return {
-    todos,
-    addTodo,
-    removeTodo,
     isSortCompleted,
     setIsSortCompleted,
     sortTodosCompleted,

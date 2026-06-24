@@ -6,23 +6,31 @@ import { getTodosStore } from "../store/todo-store";
 const TODOContext = createContext({});
 
 function TODOProvider({ children }) {
-  const {
-    addTodo,
-    isSortCompleted,
-    removeTodo,
-    setIsSortCompleted,
-    sortTodosCompleted,
-  } = useTodos();
-
   const [state, dispatch] = useReducer(TodoReducer, getTodosStore());
+
+  const { isSortCompleted, setIsSortCompleted, sortTodosCompleted } =
+    useTodos(state);
 
   return (
     <TODOContext.Provider
       value={{
         todos: state,
         isSortCompleted,
-        addTodo,
-        removeTodo,
+        // Buscamos el todo con el id que nos pasen desde el contexto
+        getTodo: (todoId) => state.find((todo) => todo.id === todoId),
+        addTodo: ({ title, onCompleted }) => {
+          const trimedTitle = title.trim();
+          if (!trimedTitle) return;
+          dispatch({
+            type: TodoActions.ADD_TODO,
+            payload: { title: trimedTitle, onCompleted },
+          });
+        },
+        removeTodo: (id) =>
+          dispatch({
+            type: TodoActions.DELETE_TODO,
+            payload: id,
+          }),
         setIsSortCompleted,
         sortTodosCompleted,
         updateTodo: (newTodo) =>

@@ -7,20 +7,23 @@ import useTheme from "../theme/useTheme";
 export default function DarkModeButton() {
   const { theme, setTheme } = useContext(ThemeContext);
   const currentTheme = useTheme();
+  const isDark = theme === "dark";
 
   return (
-    <span
-      className="btn-darkMode"
+    <button
+      type="button"
+      className={currentTheme.darkModeButton}
+      aria-label={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
+      title={isDark ? "Modo claro" : "Modo oscuro"}
       onClick={() => {
-        const newTheme = theme === "dark" ? "light" : "dark";
-        setTheme(newTheme);
+        setTheme(isDark ? "light" : "dark");
       }}
     >
-      {theme === "dark" ? (
+      {isDark ? (
         <SunIcon theme={currentTheme} />
       ) : (
         <MoonIcon theme={currentTheme} />
       )}
-    </span>
+    </button>
   );
 }

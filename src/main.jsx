@@ -7,7 +7,9 @@ import { ThemeProvider } from "./context/ThemeContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    {/**Theme Provider */}
     <ThemeProvider>
+      {/**Todos Provider */}
       <TODOProvider>
         <App />
       </TODOProvider>

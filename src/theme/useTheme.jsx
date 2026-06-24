@@ -5,5 +5,5 @@ import { themes } from "./themes";
 export default function useTheme() {
   const { theme } = useContext(ThemeContext);
 
-  return themes[theme /* === "dark" ? "dark" : "light" */];
+  return themes[theme] ?? themes.light;
 }

@@ -3,6 +3,7 @@ import Input from "./Input";
 import useTodo from "../hooks/useTodo";
 import { useContext } from "react";
 import { TODOContext } from "../context/TODOContext";
+import { Link } from "react-router-dom";
 
 export default function TodoItem({ todo, theme }) {
   const { updateTodo, removeTodo } = useContext(TODOContext);
@@ -10,12 +11,18 @@ export default function TodoItem({ todo, theme }) {
   const { isEditing, onEdit, inputRef } = useTodo(todo, updateTodo);
   const btnEditTitle = isEditing ? "Guardar" : "Editar";
 
-  console.log("Rederizando TodoItem");
-
   return (
-    <li className={`todo-item${isEditing ? " todo-item-editing" : ""}`}>
+    <Link
+      to={`/${id}`}
+      className={`${theme.todoItem}${isEditing ? " todo-item-editing" : ""}${
+        todo.completed ? " todo-item-completed" : ""
+      }`}
+    >
       <Input
-        type={"checkbox"}
+        id={`todo-completed-${id}`}
+        name={`todo-completed-${id}`}
+        className={theme.todoCheckbox}
+        type="checkbox"
         checked={todo.completed}
         onChange={() => updateTodo({ ...todo, completed: !todo.completed })}
       />
@@ -44,6 +51,6 @@ export default function TodoItem({ todo, theme }) {
           ariaLabel={`Eliminar tarea: ${title}`}
         />
       </div>
-    </li>
+    </Link>
   );
 }
