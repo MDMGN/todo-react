@@ -1,19 +1,23 @@
 import Button from "./Button";
 import Input from "./Input";
 import useTodo from "../hooks/useTodo";
-import { useContext } from "react";
-import { TODOContext } from "../context/TODOContext";
 import { Link } from "react-router-dom";
+import useTodosStore from "../store/useTodosStore";
+import { useShallow } from "zustand/shallow";
 
 export default function TodoItem({ todo, theme }) {
-  const { updateTodo, removeTodo } = useContext(TODOContext);
+  const { updateTodo, removeTodo } = useTodosStore(
+    useShallow((state) => ({
+      updateTodo: state.updateTodo,
+      removeTodo: state.removeTodo,
+    })),
+  );
   const { id, title } = todo;
   const { isEditing, onEdit, inputRef } = useTodo(todo, updateTodo);
   const btnEditTitle = isEditing ? "Guardar" : "Editar";
 
   return (
-    <Link
-      to={`/${id}`}
+    <div
       className={`${theme.todoItem}${isEditing ? " todo-item-editing" : ""}${
         todo.completed ? " todo-item-completed" : ""
       }`}
@@ -26,15 +30,25 @@ export default function TodoItem({ todo, theme }) {
         checked={todo.completed}
         onChange={() => updateTodo({ ...todo, completed: !todo.completed })}
       />
-      <Input
-        id={`todo-${id}`}
-        name={`todo-${id}`}
-        ref={inputRef}
-        className={theme.todoItemInput}
-        readOnly={!isEditing}
-        valueInitial={title}
-        ariaLabel={`Tarea: ${title}`}
-      />
+      <Link
+        to={`/${id}`}
+        onClick={(e) => {
+          if (isEditing) {
+            e.preventDefault();
+          }
+        }}
+      >
+        <Input
+          id={`todo-${id}`}
+          name={`todo-${id}`}
+          ref={inputRef}
+          className={theme.todoItemInput}
+          readOnly={!isEditing}
+          valueInitial={title}
+          ariaLabel={`Tarea: ${title}`}
+        />
+      </Link>
+
       <div className="todo-actions">
         <Button
           onClick={() => onEdit(inputRef.current.value.trim())}
@@ -51,6 +65,6 @@ export default function TodoItem({ todo, theme }) {
           ariaLabel={`Eliminar tarea: ${title}`}
         />
       </div>
-    </Link>
+    </div>
   );
 }

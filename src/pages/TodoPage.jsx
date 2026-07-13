@@ -1,12 +1,11 @@
-import { useContext } from "react";
 import { useParams } from "react-router-dom";
-import { TODOContext } from "../context/TODOContext";
 import EmptyMessage from "../components/EmptyMessage";
 import { DateFormat } from "../helpers/helpers";
+import useTodosStore from "../store/useTodosStore";
 
 export default function TodoPage() {
   const { id } = useParams();
-  const { getTodo } = useContext(TODOContext);
+  const getTodo = useTodosStore((state) => state.getTodo);
   const todo = getTodo(id);
   if (!todo) {
     return <EmptyMessage />;
