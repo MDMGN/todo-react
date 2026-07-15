@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import useTheme from "../theme/useTheme";
 import Input from "./Input";
 import Button from "./Button";
@@ -7,19 +7,22 @@ import EmptyMessage from "./EmptyMessage";
 import useTodosStore from "../store/useTodosStore";
 import useTodos from "../hooks/useTodos";
 import { useShallow } from "zustand/shallow";
+import useAuthStore from "../store/useAuthStore";
 
 export default function Home() {
   const inputRef = useRef();
   const currentTheme = useTheme();
+  const accessToken = useAuthStore((state) => state.token);
   // Una de la formas correctas de llamar al estado por selectores dentro de zustand
   /*  const addTodo = useTodosStore(state=> state.addTodo)
       const todos = useTodosStore(state=> state.todos)
  */
   // La forma  simplificada de llamar al estado y metodos en zustand con "useShallow"
-  const { addTodo, todos } = useTodosStore(
+  const { addTodo, todos, loadTodos } = useTodosStore(
     useShallow((state) => ({
       todos: state.todos,
       addTodo: state.addTodo,
+      loadTodos: state.loadTodos,
     })),
   );
 
@@ -36,6 +39,13 @@ export default function Home() {
       },
     });
   }
+
+  useEffect(() => {
+    console.log({ accessToken });
+    if (accessToken) {
+      loadTodos(accessToken);
+    }
+  }, [loadTodos, accessToken]);
 
   const isEmptyTodoList = todos.length === 0;
   const todoCounter = todos.length === 1 ? "1 tarea" : `${todos.length} tareas`;

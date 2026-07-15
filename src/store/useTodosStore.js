@@ -1,8 +1,17 @@
 import { create } from "zustand";
-import { getTodosStore, updateTodoStore } from "./todo-store";
+import { updateTodoStore } from "./todo-store";
+import { http } from "../helpers/helpers";
+import { URL_TODOS } from "../config/api";
 
 const useTodosStore = create((set, get) => ({
-  todos: getTodosStore(),
+  todos: [],
+  loadTodos: async (accesToken) =>
+    http({
+      url: URL_TODOS,
+      token: accesToken,
+      cbSuccess: (todos) => set({ todos }),
+      cbError: (err) => console.error(err),
+    }),
   getTodo: (id) => get().todos?.find((todo) => todo.id === id),
   addTodo: ({ title, onCompleted }) => {
     const newTodo = {
