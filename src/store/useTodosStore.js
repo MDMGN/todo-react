@@ -1,17 +1,19 @@
 import { create } from "zustand";
 import { updateTodoStore } from "./todo-store";
-import { http } from "../helpers/helpers";
-import { URL_TODOS } from "../config/api";
+
+import getTodosUseCase from "../usecases/getTodos.usecase";
 
 const useTodosStore = create((set, get) => ({
   todos: [],
-  loadTodos: async (accesToken) =>
-    http({
-      url: URL_TODOS,
-      token: accesToken,
-      cbSuccess: (todos) => set({ todos }),
-      cbError: (err) => console.error(err),
-    }),
+  error: null,
+  loadTodos: async (accesToken) => {
+    try {
+      const todos = await getTodosUseCase(accesToken);
+      set({ todos });
+    } catch (err) {
+      set({ error: err });
+    }
+  },
   getTodo: (id) => get().todos?.find((todo) => todo.id === id),
   addTodo: ({ title, onCompleted }) => {
     const newTodo = {

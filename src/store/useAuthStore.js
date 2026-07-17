@@ -1,20 +1,16 @@
 import { create } from "zustand";
-import { http } from "../helpers/helpers";
-import { URL_LOGIN } from "../config/api";
 
-const useAuthStore = create((set, get) => ({
+import loginUseCase from "../usecases/login.usecase";
+
+const useAuthStore = create((set) => ({
   token: null,
   login: async () => {
-    http({
-      url: URL_LOGIN,
-      method: "POST",
-      body: new URLSearchParams({
-        email: "michaelmdvr@gmail.com",
-        password: "ABCabc123!",
-      }),
-      cbError: (err) => console.error(err),
-      cbSuccess: ({ data }) => set({ token: data.token }),
-    }).finally(() => console.log(get().token));
+    try {
+      const token = await loginUseCase();
+      set({ token });
+    } catch (err) {
+      console.error(err);
+    }
   },
 }));
 export default useAuthStore;

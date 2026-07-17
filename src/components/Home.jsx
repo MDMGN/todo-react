@@ -12,7 +12,6 @@ import useAuthStore from "../store/useAuthStore";
 export default function Home() {
   const inputRef = useRef();
   const currentTheme = useTheme();
-  const accessToken = useAuthStore((state) => state.token);
   // Una de la formas correctas de llamar al estado por selectores dentro de zustand
   /*  const addTodo = useTodosStore(state=> state.addTodo)
       const todos = useTodosStore(state=> state.todos)
@@ -25,6 +24,15 @@ export default function Home() {
       loadTodos: state.loadTodos,
     })),
   );
+
+  const { login, accessToken } = useAuthStore(
+    useShallow((state) => ({
+      login: state.login,
+      accessToken: state.token,
+    })),
+  );
+
+  const isRequested = useRef(false);
 
   const { isSortCompleted, setIsSortCompleted, sortTodosCompleted } =
     useTodos(todos);
@@ -41,11 +49,18 @@ export default function Home() {
   }
 
   useEffect(() => {
-    console.log({ accessToken });
     if (accessToken) {
+      console.log({ accessToken });
       loadTodos(accessToken);
     }
   }, [loadTodos, accessToken]);
+
+  useEffect(() => {
+    if (!accessToken && !isRequested.current) {
+      isRequested.current = true;
+      login().finally(() => (isRequested.current = false));
+    }
+  }, [accessToken, login]);
 
   const isEmptyTodoList = todos.length === 0;
   const todoCounter = todos.length === 1 ? "1 tarea" : `${todos.length} tareas`;
