@@ -1,47 +1,75 @@
 import { create } from "zustand";
-import { updateTodoStore } from "./todo-store";
-
 import getTodosUseCase from "../usecases/getTodos.usecase";
+import addTodoUseCase from "../usecases/addTodo.usecase";
+import deleteTodoUseCase from "../usecases/deleteTodo.usecase";
+import updateTodoUseCase from "../usecases/updateTodo.usecase";
+import getTodoUseCase from "../usecases/getTodo.usecase";
 
 const useTodosStore = create((set, get) => ({
   todos: [],
   error: null,
   loadTodos: async (accesToken) => {
+    set({ error: null });
     try {
       const todos = await getTodosUseCase(accesToken);
       set({ todos });
-    } catch (err) {
-      set({ error: err });
+    } catch (error) {
+      set({ error });
     }
   },
-  getTodo: (id) => get().todos?.find((todo) => todo.id === id),
-  addTodo: ({ title, onCompleted }) => {
-    const newTodo = {
-      id: Date.now().toString(36),
-      title: title,
-      createdAt: Date.now(),
-      completed: false,
-    };
-    const updatedTodos = [...get().todos, newTodo];
-    set({ todos: updatedTodos });
-    updateTodoStore(updatedTodos);
-    onCompleted?.();
+  getTodo: async (id) => {
+    try {
+      const todo = await getTodoUseCase(id);
+      return todo;
+    } catch (error) {
+      set({ error });
+      return null;
+    }
   },
-  updateTodo: (newTodo) => {
-    const updatedTodos = get().todos.map((todo) =>
-      todo.id === newTodo.id ? newTodo : todo,
-    );
-    set({
-      todos: updatedTodos,
-    });
-    updateTodoStore(updatedTodos);
+  addTodo: async ({ title, onCompleted, accessToken }) => {
+    set({ error: null });
+    try {
+      const newTodo = await addTodoUseCase({ title, accessToken });
+      const updatedTodos = [...get().todos, newTodo];
+      set({ todos: updatedTodos });
+    } catch (error) {
+      set({ error });
+    } finally {
+      onCompleted?.();
+    }
   },
-  removeTodo: (todoId) => {
-    const updatedTodos = get().todos.filter((todo) => todo.id !== todoId);
+  updateTodo: async (newTodo, accessToken) => {
+    try {
+      const updatedTodo = await updateTodoUseCase(
+        newTodo.id,
+        accessToken,
+        newTodo,
+      );
+      const updatedTodos = get().todos.map((todo) =>
+        todo.id === newTodo.id ? updatedTodo : todo,
+      );
+      set({
+        todos: updatedTodos,
+      });
+    } catch (error) {
+      set({ error });
+    }
+  },
+  removeTodo: async (todoId, accessToken) => {
     set({
-      todos: updatedTodos,
+      error: null,
     });
-    updateTodoStore(updatedTodos);
+    try {
+      const deletedTodo = await deleteTodoUseCase(todoId, accessToken);
+      const updatedTodos = get().todos.filter(
+        (todo) => todo.id !== deletedTodo.id,
+      );
+      set({
+        todos: updatedTodos,
+      });
+    } catch (error) {
+      set({ error });
+    }
   },
 }));
 

@@ -3,6 +3,7 @@ import Input from "./Input";
 import useTodo from "../hooks/useTodo";
 import { Link } from "react-router-dom";
 import useTodosStore from "../store/useTodosStore";
+import useAuthStore from "../store/useAuthStore";
 import { useShallow } from "zustand/shallow";
 
 export default function TodoItem({ todo, theme }) {
@@ -12,6 +13,9 @@ export default function TodoItem({ todo, theme }) {
       removeTodo: state.removeTodo,
     })),
   );
+
+  const accessToken = useAuthStore((state) => state.token);
+
   const { id, title } = todo;
   const { isEditing, onEdit, inputRef } = useTodo(todo, updateTodo);
   const btnEditTitle = isEditing ? "Guardar" : "Editar";
@@ -28,7 +32,9 @@ export default function TodoItem({ todo, theme }) {
         className={theme.todoCheckbox}
         type="checkbox"
         checked={todo.completed}
-        onChange={() => updateTodo({ ...todo, completed: !todo.completed })}
+        onChange={() =>
+          updateTodo({ ...todo, completed: !todo.completed }, accessToken)
+        }
       />
       <Link
         to={`/${id}`}
@@ -58,7 +64,7 @@ export default function TodoItem({ todo, theme }) {
           ariaLabel={`${btnEditTitle} tarea: ${title}`}
         />
         <Button
-          onClick={() => removeTodo(id)}
+          onClick={() => removeTodo(id, accessToken)}
           title="Eliminar"
           variant="danger"
           className="button-small"

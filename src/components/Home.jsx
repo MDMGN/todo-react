@@ -41,6 +41,7 @@ export default function Home() {
     e.preventDefault();
     addTodo({
       title: inputRef.current.value.trim(),
+      accessToken,
       onCompleted: () => {
         inputRef.current.value = "";
         inputRef.current.focus();

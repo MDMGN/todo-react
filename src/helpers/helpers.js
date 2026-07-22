@@ -1,7 +1,7 @@
 export function DateFormat(lang, date) {
   return new Intl.DateTimeFormat(lang, {
     dateStyle: "long",
-  }).format(new Date(date));
+  }).format(new Date(date?.toString()));
 }
 
 export async function http({ url, token, method = "GET", body }) {
@@ -12,6 +12,6 @@ export async function http({ url, token, method = "GET", body }) {
   }).then((response) =>
     response.ok
       ? response.json()
-      : Promise.reject({ data: response.json() , code: response.status }),
+      : Promise.reject({ data: response.json(), code: response.status }),
   );
 }
